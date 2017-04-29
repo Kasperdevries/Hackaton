@@ -5,9 +5,9 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create
 
 function preload() {
     game.load.image('sky', 'assets/img/sky.png');
-    game.load.image('ground', 'assets/img/platform.png');
+    game.load.image('ground', 'assets/img/ground (2).png');
     game.load.image('star', 'assets/img/star.png');
-    game.load.spritesheet('dude', 'assets/img/dude.png', 32, 48);
+    game.load.spritesheet('dude', 'assets/img/stijn.png', 32, 48);
 }
 
 function create() {
@@ -24,15 +24,14 @@ function create() {
     //  We will enable physics for any object that is created in this group
     platforms.enableBody = true;
 
+
+    var ground;
     // Here we create the ground.
-    var ground = platforms.create(0, game.world.height - 64, 'ground');
-
-    //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-    ground.scale.setTo(2, 2);
-
-    //  This stops it from falling away when you jump on it
-    ground.body.immovable = true;
-
+    for (var i = 0; i < 8; i++){
+        ground = platforms.create((i * 64), game.world.height - 64, 'ground');
+        ground.scale.setTo(2, 2);
+        ground.body.immovable = true;
+    }
 
 
     //  Now let's create two ledges
@@ -55,7 +54,7 @@ function create() {
 
     //  Player physics properties. Give the little guy a slight bounce.
     player.body.bounce.y = 0.2;
-    player.body.gravity.y = 300;
+    player.body.gravity.y = 500;
     player.body.collideWorldBounds = true;
 
     //  Our two animations, walking left and right.
@@ -64,12 +63,14 @@ function create() {
 
 
     cursors = game.input.keyboard.createCursorKeys();
+
 }
 
 function update() {
 
     //  Collide the player and the stars with the platforms
     var hitPlatform = game.physics.arcade.collide(player, platforms);
+
 
     //  Reset the players velocity (movement)
     player.body.velocity.x = 0;
@@ -99,6 +100,6 @@ function update() {
     //  Allow the player to jump if they are touching the ground.
     if (cursors.up.isDown && player.body.touching.down && hitPlatform)
     {
-        player.body.velocity.y = -350;
+        player.body.velocity.y = -300;
     }
 }
